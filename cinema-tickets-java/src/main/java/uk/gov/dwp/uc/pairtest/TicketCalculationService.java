@@ -25,6 +25,27 @@ public class TicketCalculationService {
         return totalCost;
     }
 
+    /**
+     * Calculate the total number of seats needed for the requested tickets.
+     *
+     * @param ticketTypeRequests the ticket requests
+     * @return the total number of seats
+     */
+    public int calculateTotalSeats(TicketTypeRequest... ticketTypeRequests) {
+        int totalSeats = 0;
+
+        for (TicketTypeRequest req : ticketTypeRequests) {
+            TicketTypeRequest.Type type = req.getTicketType();
+            TicketTypeInfo info = TicketTypeInfoFactory.getInfo(type);
+
+            int quantity = req.getNoOfTickets();
+            if (info.requiresSeat()) {
+                totalSeats += quantity;
+            }
+        }
+
+        return totalSeats;
+    }
 
 
 }

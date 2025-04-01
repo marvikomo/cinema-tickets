@@ -61,6 +61,55 @@ public class TicketCalculationServiceTest {
         assertEquals((adultPrice * 2 + childPrice * 3), totalCost);
     }
 
+    @Test
+    @DisplayName("Should calculate total seats correctly for child tickets")
+    void shouldCalculateTotalSeatsForChildTickets() {
+        TicketTypeRequest request = new TicketTypeRequest(TicketTypeRequest.Type.CHILD, 4);
+
+        int totalSeats = calculationService.calculateTotalSeats(request);
+
+        assertEquals(4, totalSeats); // 4 children require 4 seats
+    }
+
+    @Test
+    @DisplayName("Should calculate total seats correctly for infant tickets")
+    void shouldCalculateTotalSeatsForInfantTickets() {
+        TicketTypeRequest request = new TicketTypeRequest(TicketTypeRequest.Type.INFANT, 2);
+
+        int totalSeats = calculationService.calculateTotalSeats(request);
+
+        assertEquals(0, totalSeats); // 2 infants require 0 seats
+    }
+
+
+    @Test
+    @DisplayName("Should calculate total seats correctly for mixed ticket types")
+    void shouldCalculateTotalSeatsForMixedTicketTypes() {
+        TicketTypeRequest adultRequest = new TicketTypeRequest(TicketTypeRequest.Type.ADULT, 2);
+        TicketTypeRequest childRequest = new TicketTypeRequest(TicketTypeRequest.Type.CHILD, 3);
+        TicketTypeRequest infantRequest = new TicketTypeRequest(TicketTypeRequest.Type.INFANT, 1);
+
+        int totalSeats = calculationService.calculateTotalSeats(adultRequest, childRequest, infantRequest);
+
+        assertEquals(5, totalSeats); // 2 adults + 3 children + 0 infants = 5 seats
+    }
+
+    @Test
+    @DisplayName("Should handle empty array when calculating total cost")
+    void shouldHandleEmptyArrayWhenCalculatingTotalCost() {
+        int totalCost = calculationService.calculateTotalCost();
+
+        assertEquals(0, totalCost);
+    }
+
+    @Test
+    @DisplayName("Should handle empty array when calculating total seats")
+    void shouldHandleEmptyArrayWhenCalculatingTotalSeats() {
+        int totalSeats = calculationService.calculateTotalSeats();
+
+        assertEquals(0, totalSeats);
+    }
+
 
 
 
