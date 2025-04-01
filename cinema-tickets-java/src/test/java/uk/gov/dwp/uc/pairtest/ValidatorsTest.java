@@ -29,4 +29,16 @@ public class ValidatorsTest {
 
         assertEquals("Invalid account ID.", exception.getMessage());
     }
+
+    @Test
+    @DisplayName("AccountValidator: Should throw exception for negative account ID")
+    void accountValidatorShouldThrowExceptionForNegativeAccountId() {
+        AccountValidator validator = new AccountValidator();
+        Exception exception = assertThrows(InvalidPurchaseException.class,
+                () -> validator.validate(-1L, new TicketTypeRequest(TicketTypeRequest.Type.ADULT, 1)));
+
+        assertEquals("Invalid account ID.", exception.getMessage());
+    }
+
+
 }
