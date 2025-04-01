@@ -51,4 +51,18 @@ public class ValidatorsTest {
         assertThrows(Exception.class, () -> validator.validate(1L, (TicketTypeRequest[]) null));
     }
 
+    @Test
+    @DisplayName("NonEmptyRequestValidator: Should throw exception with EMPTY_REQUEST when request array is empty")
+    void nonEmptyRequestValidatorShouldThrowExceptionWithEmptyRequestWhenRequestArrayIsEmpty() {
+        NonEmptyRequestValidator validator = new NonEmptyRequestValidator();
+
+        InvalidPurchaseException exception = assertThrows(InvalidPurchaseException.class,
+                () -> validator.validate(1L));
+
+        assertEquals(InvalidPurchaseException.ValidationFailureType.EMPTY_REQUEST, exception.getFailureType());
+        assertTrue(exception.getMessage().contains("cannot be empty"));
+    }
+
+
+
 }
