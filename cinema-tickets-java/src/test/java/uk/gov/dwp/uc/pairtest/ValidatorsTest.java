@@ -141,7 +141,7 @@ public class ValidatorsTest {
     }
     @Test
     @DisplayName("AdultPresenceValidator: Should accept when adult child and infant tickets present")
-    void adultPresenceValidatorShouldAcceptWhenAdultChiledAndInfantTicketsArePresent() {
+    void adultPresenceValidatorShouldAcceptWhenAdultChildAndInfantTicketsArePresent() {
         AdultPresenceValidator validator = new AdultPresenceValidator();
         TicketTypeRequest adultRequest = new TicketTypeRequest(TicketTypeRequest.Type.ADULT, 1);
         TicketTypeRequest infantRequest = new TicketTypeRequest(TicketTypeRequest.Type.INFANT, 1);
@@ -175,5 +175,31 @@ public class ValidatorsTest {
         assertEquals(InvalidPurchaseException.ValidationFailureType.INFANT_ADULT_RATIO, exception.getFailureType());
         assertTrue(exception.getMessage().contains("cannot exceed number of adults"));
     }
+
+
+    // TicketCountValidator tests
+    @Test
+    @DisplayName("TicketCountValidator: Should accept when total tickets are less than the limit")
+    void ticketCountValidatorShouldAcceptWhenTotalTicketsAreLessThanLimit() {
+        TicketCountValidator validator = new TicketCountValidator();
+        TicketTypeRequest request = new TicketTypeRequest(TicketTypeRequest.Type.ADULT, 20);
+
+        assertDoesNotThrow(() -> validator.validate(1L, request));
+    }
+
+    @Test
+    @DisplayName("TicketCountValidator: Should throw exception with MAX_TICKETS_EXCEEDED when exceeding limit")
+    void ticketCountValidatorShouldThrowExceptionWithMaxTicketsExceededWhenExceedingLimit() {
+        TicketCountValidator validator = new TicketCountValidator();
+        TicketTypeRequest request = new TicketTypeRequest(TicketTypeRequest.Type.ADULT, 26);
+
+        InvalidPurchaseException exception = assertThrows(InvalidPurchaseException.class,
+                () -> validator.validate(1L, request));
+
+        assertEquals(InvalidPurchaseException.ValidationFailureType.MAX_TICKETS_EXCEEDED, exception.getFailureType());
+        assertTrue(exception.getMessage().contains("more than 25 tickets"));
+    }
+
+
 
 }
