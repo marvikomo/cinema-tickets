@@ -21,7 +21,16 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public void purchaseTickets(Long accountId, TicketTypeRequest... ticketTypeRequests) throws InvalidPurchaseException {
-
+        if (accountId == null || accountId <= 0) {
+            throw new InvalidPurchaseException(
+                    "Invalid account ID.",
+                    InvalidPurchaseException.ValidationFailureType.INVALID_ACCOUNT_ID);
+        }
+        if (ticketTypeRequests == null || ticketTypeRequests.length == 0) {
+            throw new InvalidPurchaseException(
+                    "Ticket requests cannot be empty.",
+                    InvalidPurchaseException.ValidationFailureType.EMPTY_REQUEST);
+        }
     }
 
 }
