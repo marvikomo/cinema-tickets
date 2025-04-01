@@ -3,16 +3,16 @@ package uk.gov.dwp.uc.pairtest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import thirdparty.paymentgateway.TicketPaymentService;
 import thirdparty.seatbooking.SeatReservationService;
+import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TicketServiceTest {
+public class TicketServiceImplTest {
 
     @Mock
     private TicketPaymentService paymentService;
@@ -34,12 +34,8 @@ public class TicketServiceTest {
     void shouldThrowExceptionWhenBothAccountIdNullAndRequestEmpty() {
         // Both null account ID and empty request array
         //ticketService.purchaseTickets(null);
-        Exception exception = assertThrows(IllegalArgumentException.class,
+        Exception exception = assertThrows(InvalidPurchaseException.class,
                 () -> ticketService.purchaseTickets(null));
     }
 
-    @Test
-    void simplePassingTest() {
-        assertTrue(true);
-    }
 }
