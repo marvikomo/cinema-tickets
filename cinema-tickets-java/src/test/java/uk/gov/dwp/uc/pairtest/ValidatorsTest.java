@@ -6,6 +6,7 @@ import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
 import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
 import uk.gov.dwp.uc.pairtest.validators.AccountValidator;
 import uk.gov.dwp.uc.pairtest.validators.NonEmptyRequestValidator;
+import uk.gov.dwp.uc.pairtest.validators.PositiveQuantityValidator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -64,5 +65,30 @@ public class ValidatorsTest {
     }
 
 
+    //Test for positive quantity
+
+    @Test
+    @DisplayName("PositiveQuantityValidator: Should throw exception with INVALID_TICKET_QUANTITY when zero quantity")
+    void positiveQuantityValidatorShouldThrowExceptionWithInvalidTicketQuantityWhenZeroQuantity() {
+        PositiveQuantityValidator validator = new PositiveQuantityValidator();
+        TicketTypeRequest request1 = new TicketTypeRequest(TicketTypeRequest.Type.ADULT, 1);
+        TicketTypeRequest request2 = new TicketTypeRequest(TicketTypeRequest.Type.CHILD, 0);
+
+        InvalidPurchaseException exception = assertThrows(InvalidPurchaseException.class,
+                () -> validator.validate(1L, request1, request2));
+
+        assertEquals(InvalidPurchaseException.ValidationFailureType.INVALID_TICKET_QUANTITY, exception.getFailureType());
+        assertTrue(exception.getMessage().contains("must be positive"));
+    }
+
+    @Test
+    @DisplayName("PositiveQuantityValidator: Should accept when all ticket quantities are positive")
+    void positiveQuantityValidatorShouldAcceptWhenAllTicketQuantitiesArePositive() {
+        PositiveQuantityValidator validator = new PositiveQuantityValidator();
+        TicketTypeRequest request1 = new TicketTypeRequest(TicketTypeRequest.Type.ADULT, 1);
+        TicketTypeRequest request2 = new TicketTypeRequest(TicketTypeRequest.Type.CHILD, 2);
+
+        assertDoesNotThrow(() -> validator.validate(1L, request1, request2));
+    }
 
 }
