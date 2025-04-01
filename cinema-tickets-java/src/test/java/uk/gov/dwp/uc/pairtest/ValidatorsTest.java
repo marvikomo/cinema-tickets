@@ -24,7 +24,7 @@ public class ValidatorsTest {
     @DisplayName("AccountValidator: Should throw exception for zero account ID")
     void accountValidatorShouldThrowExceptionForZeroAccountId() {
         AccountValidator validator = new AccountValidator();
-        Exception exception = assertThrows(IllegalArgumentException.class,
+        Exception exception = assertThrows(InvalidPurchaseException.class,
                 () -> validator.validate(0L, new TicketTypeRequest(TicketTypeRequest.Type.ADULT, 1)));
 
         assertEquals("Invalid account ID.", exception.getMessage());
