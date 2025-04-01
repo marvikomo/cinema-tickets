@@ -33,7 +33,6 @@ public class TicketServiceImplTest {
     @DisplayName("Should throw exception when both account ID is null and request is empty")
     void shouldThrowExceptionWhenBothAccountIdNullAndRequestEmpty() {
         // Both null account ID and empty request array
-        //ticketService.purchaseTickets(null);
         Exception exception = assertThrows(InvalidPurchaseException.class,
                 () -> ticketService.purchaseTickets(null));
     }
