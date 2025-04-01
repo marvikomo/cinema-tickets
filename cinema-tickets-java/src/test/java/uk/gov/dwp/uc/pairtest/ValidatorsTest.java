@@ -4,10 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
 import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
-import uk.gov.dwp.uc.pairtest.validators.AccountValidator;
-import uk.gov.dwp.uc.pairtest.validators.AdultPresenceValidator;
-import uk.gov.dwp.uc.pairtest.validators.NonEmptyRequestValidator;
-import uk.gov.dwp.uc.pairtest.validators.PositiveQuantityValidator;
+import uk.gov.dwp.uc.pairtest.validators.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -151,6 +148,32 @@ public class ValidatorsTest {
         TicketTypeRequest childRequest = new TicketTypeRequest(TicketTypeRequest.Type.CHILD, 1);
 
         assertDoesNotThrow(() -> validator.validate(1L, adultRequest, infantRequest, childRequest));
+    }
+
+
+    // InfantAdultRatioValidator tests
+    @Test
+    @DisplayName("InfantAdultRatioValidator: Should accept when infants are fewer than adults")
+    void infantAdultRatioValidatorShouldAcceptWhenInfantsAreFewerThanAdults() {
+        InfantAdultRatioValidator validator = new InfantAdultRatioValidator();
+        TicketTypeRequest adultRequest = new TicketTypeRequest(TicketTypeRequest.Type.ADULT, 2);
+        TicketTypeRequest infantRequest = new TicketTypeRequest(TicketTypeRequest.Type.INFANT, 1);
+
+        assertDoesNotThrow(() -> validator.validate(1L, adultRequest, infantRequest));
+    }
+
+    @Test
+    @DisplayName("InfantAdultRatioValidator: Should throw exception with INFANT_ADULT_RATIO when infants exceed adults")
+    void infantAdultRatioValidatorShouldThrowExceptionWithInfantAdultRatioWhenInfantsExceedAdults() {
+        InfantAdultRatioValidator validator = new InfantAdultRatioValidator();
+        TicketTypeRequest adultRequest = new TicketTypeRequest(TicketTypeRequest.Type.ADULT, 1);
+        TicketTypeRequest infantRequest = new TicketTypeRequest(TicketTypeRequest.Type.INFANT, 2);
+
+        InvalidPurchaseException exception = assertThrows(InvalidPurchaseException.class,
+                () -> validator.validate(1L, adultRequest, infantRequest));
+
+        assertEquals(InvalidPurchaseException.ValidationFailureType.INFANT_ADULT_RATIO, exception.getFailureType());
+        assertTrue(exception.getMessage().contains("cannot exceed number of adults"));
     }
 
 }
