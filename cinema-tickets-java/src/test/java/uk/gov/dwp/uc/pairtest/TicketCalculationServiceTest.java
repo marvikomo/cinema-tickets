@@ -11,8 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TicketCalculationServiceTest {
     private TicketCalculationService calculationService;
 
-    int adultPrice = TicketTypeInfoFactory.getInfo(TicketTypeRequest.Type.ADULT).getPrice();
-    int childPrice =  TicketTypeInfoFactory.getInfo(TicketTypeRequest.Type.CHILD).getPrice();
+    int adultPrice = TicketTypeInfoFactory.getInfo(TicketTypeRequest.Type.ADULT).price();
+    int childPrice =  TicketTypeInfoFactory.getInfo(TicketTypeRequest.Type.CHILD).price();
 
     @BeforeEach
     void setUp() {

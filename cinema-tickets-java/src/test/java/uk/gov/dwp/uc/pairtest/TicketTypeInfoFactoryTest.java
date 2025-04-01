@@ -15,7 +15,7 @@ public class TicketTypeInfoFactoryTest {
     void shouldReturnAdultTicketInformation() {
         TicketTypeInfo info = TicketTypeInfoFactory.getInfo(TicketTypeRequest.Type.ADULT);
 
-        assertEquals(25, info.getPrice());
+        assertEquals(25, info.price());
         assertTrue(info.requiresSeat());
     }
 
@@ -24,7 +24,7 @@ public class TicketTypeInfoFactoryTest {
     void shouldReturnChildTicketInformation() {
         TicketTypeInfo info = TicketTypeInfoFactory.getInfo(TicketTypeRequest.Type.CHILD);
 
-        assertEquals(15, info.getPrice());
+        assertEquals(15, info.price());
         assertTrue(info.requiresSeat());
     }
 
@@ -33,7 +33,7 @@ public class TicketTypeInfoFactoryTest {
     void shouldReturnInfantTicketInformation() {
         TicketTypeInfo info = TicketTypeInfoFactory.getInfo(TicketTypeRequest.Type.INFANT);
 
-        assertEquals(0, info.getPrice());
+        assertEquals(0, info.price());
         assertFalse(info.requiresSeat());
     }
 

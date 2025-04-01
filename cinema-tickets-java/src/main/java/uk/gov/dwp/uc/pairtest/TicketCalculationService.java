@@ -19,7 +19,7 @@ public class TicketCalculationService {
             TicketTypeInfo info = TicketTypeInfoFactory.getInfo(type);
 
             int quantity = req.getNoOfTickets();
-            totalCost += quantity * info.getPrice();
+            totalCost += quantity * info.price();
         }
 
         return totalCost;
