@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
 import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
 import uk.gov.dwp.uc.pairtest.validators.AccountValidator;
+import uk.gov.dwp.uc.pairtest.validators.NonEmptyRequestValidator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -40,5 +41,14 @@ public class ValidatorsTest {
         assertEquals("Invalid account ID.", exception.getMessage());
     }
 
+
+    //Ticket Request Validtor tests
+
+    @Test
+    @DisplayName("NonEmptyRequestValidator: Should throw exception when request array is null")
+    void nonEmptyRequestValidatorShouldThrowExceptionWhenRequestArrayIsNull() {
+        NonEmptyRequestValidator validator = new NonEmptyRequestValidator();
+        assertThrows(Exception.class, () -> validator.validate(1L, (TicketTypeRequest[]) null));
+    }
 
 }
