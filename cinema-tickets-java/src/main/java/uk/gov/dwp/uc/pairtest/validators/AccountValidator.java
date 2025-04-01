@@ -7,7 +7,7 @@ public class AccountValidator implements TicketValidator{
     @Override
     public void validate(Long accountId, TicketTypeRequest... requests) {
 
-        if(accountId == null) {
+        if(accountId == null || accountId <= 0) {
             throw new InvalidPurchaseException("Invalid account ID.", InvalidPurchaseException.ValidationFailureType.INVALID_ACCOUNT_ID);
         }
 
