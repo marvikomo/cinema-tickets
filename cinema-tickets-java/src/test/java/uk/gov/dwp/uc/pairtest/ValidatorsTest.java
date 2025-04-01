@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
 import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
+import uk.gov.dwp.uc.pairtest.exception.PurchaseExceptionMessages;
 import uk.gov.dwp.uc.pairtest.validators.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -197,7 +198,7 @@ public class ValidatorsTest {
                 () -> validator.validate(1L, request));
 
         assertEquals(InvalidPurchaseException.ValidationFailureType.MAX_TICKETS_EXCEEDED, exception.getFailureType());
-        assertTrue(exception.getMessage().contains("more than 25 tickets"));
+        assertTrue(exception.getMessage().contains(PurchaseExceptionMessages.format(PurchaseExceptionMessages.MSG_MAX_TICKETS_EXCEEDED, 25)));
     }
 
 

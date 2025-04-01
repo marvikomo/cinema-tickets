@@ -2,10 +2,12 @@ package uk.gov.dwp.uc.pairtest.validators;
 
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
 import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
+import uk.gov.dwp.uc.pairtest.exception.PurchaseExceptionMessages;
 
 import java.util.Arrays;
 
 public class TicketCountValidator implements TicketValidator{
+    private static int MAX_TICKETS = 25;
     /**
      * @param accountId
      * @param requests
@@ -16,9 +18,9 @@ public class TicketCountValidator implements TicketValidator{
                 .mapToInt(TicketTypeRequest::getNoOfTickets)
                 .sum();
 
-        if (totalTickets > 25) {
+        if (totalTickets > MAX_TICKETS) {
             throw new InvalidPurchaseException(
-                    "Cannot purchase more than 25 tickets.",
+                    PurchaseExceptionMessages.format(PurchaseExceptionMessages.MSG_MAX_TICKETS_EXCEEDED, MAX_TICKETS),
                     InvalidPurchaseException.ValidationFailureType.MAX_TICKETS_EXCEEDED);
         }
     }
