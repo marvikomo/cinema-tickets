@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
 import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
 import uk.gov.dwp.uc.pairtest.validators.AccountValidator;
+import uk.gov.dwp.uc.pairtest.validators.AdultPresenceValidator;
 import uk.gov.dwp.uc.pairtest.validators.NonEmptyRequestValidator;
 import uk.gov.dwp.uc.pairtest.validators.PositiveQuantityValidator;
 
@@ -89,6 +90,67 @@ public class ValidatorsTest {
         TicketTypeRequest request2 = new TicketTypeRequest(TicketTypeRequest.Type.CHILD, 2);
 
         assertDoesNotThrow(() -> validator.validate(1L, request1, request2));
+    }
+
+    //AdultPresence Validator teste
+
+    @Test
+    @DisplayName("AdultPresenceValidator: Should throw exception with NO_ADULT_TICKET type when only child tickets")
+    void adultPresenceValidatorShouldThrowExceptionWithNoAdultTicketTypeWhenOnlyChildTickets() {
+        AdultPresenceValidator validator = new AdultPresenceValidator();
+        TicketTypeRequest childRequest = new TicketTypeRequest(TicketTypeRequest.Type.CHILD, 1);
+
+        InvalidPurchaseException exception = assertThrows(InvalidPurchaseException.class,
+                () -> validator.validate(1L, childRequest));
+
+        assertEquals(InvalidPurchaseException.ValidationFailureType.NO_ADULT_TICKET, exception.getFailureType());
+        assertTrue(exception.getMessage().contains("require at least one Adult ticket"));
+    }
+
+    @Test
+    @DisplayName("AdultPresenceValidator: Should throw exception with NO_ADULT_TICKET type when only infant tickets")
+    void adultPresenceValidatorShouldThrowExceptionWithNoAdultTicketTypeWhenOnlyInfantTickets() {
+        AdultPresenceValidator validator = new AdultPresenceValidator();
+        TicketTypeRequest infantRequest = new TicketTypeRequest(TicketTypeRequest.Type.INFANT, 1);
+
+        InvalidPurchaseException exception = assertThrows(InvalidPurchaseException.class,
+                () -> validator.validate(1L, infantRequest));
+
+        assertEquals(InvalidPurchaseException.ValidationFailureType.NO_ADULT_TICKET, exception.getFailureType());
+        assertTrue(exception.getMessage().contains("require at least one Adult ticket"));
+    }
+
+    @Test
+    @DisplayName("AdultPresenceValidator: Should throw exception with NO_ADULT_TICKET type when both infant and child tickets")
+    void adultPresenceValidatorShouldThrowExceptionWithNoAdultTicketTypeWhenBothInfantAndChildTickets() {
+        AdultPresenceValidator validator = new AdultPresenceValidator();
+        TicketTypeRequest infantRequest = new TicketTypeRequest(TicketTypeRequest.Type.INFANT, 1);
+        TicketTypeRequest childRequest = new TicketTypeRequest(TicketTypeRequest.Type.CHILD, 1);
+
+        InvalidPurchaseException exception = assertThrows(InvalidPurchaseException.class,
+                () -> validator.validate(1L, infantRequest, childRequest));
+
+        assertEquals(InvalidPurchaseException.ValidationFailureType.NO_ADULT_TICKET, exception.getFailureType());
+        assertTrue(exception.getMessage().contains("require at least one Adult ticket"));
+    }
+
+    @Test
+    @DisplayName("AdultPresenceValidator: Should accept when adult ticket is present")
+    void adultPresenceValidatorShouldAcceptWhenAdultTicketIsPresent() {
+        AdultPresenceValidator validator = new AdultPresenceValidator();
+        TicketTypeRequest adultRequest = new TicketTypeRequest(TicketTypeRequest.Type.ADULT, 1);
+
+        assertDoesNotThrow(() -> validator.validate(1L, adultRequest));
+    }
+    @Test
+    @DisplayName("AdultPresenceValidator: Should accept when adult child and infant tickets present")
+    void adultPresenceValidatorShouldAcceptWhenAdultChiledAndInfantTicketsArePresent() {
+        AdultPresenceValidator validator = new AdultPresenceValidator();
+        TicketTypeRequest adultRequest = new TicketTypeRequest(TicketTypeRequest.Type.ADULT, 1);
+        TicketTypeRequest infantRequest = new TicketTypeRequest(TicketTypeRequest.Type.INFANT, 1);
+        TicketTypeRequest childRequest = new TicketTypeRequest(TicketTypeRequest.Type.CHILD, 1);
+
+        assertDoesNotThrow(() -> validator.validate(1L, adultRequest, infantRequest, childRequest));
     }
 
 }
