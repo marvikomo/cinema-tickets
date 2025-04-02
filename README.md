@@ -53,7 +53,6 @@ The implementation follows clean architecture and SOLID principles:
 Uses SLF4J for structured logging with the following levels:
 •	ERROR – Critical issues that prevent normal execution
 •	INFO – Key business events (e.g., ticket purchases, config changes)
-•	DEBUG – Diagnostic details for debugging and tracing
 
 ## Installation & Usage
 
