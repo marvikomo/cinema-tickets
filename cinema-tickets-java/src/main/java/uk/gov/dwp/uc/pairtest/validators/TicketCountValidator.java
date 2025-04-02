@@ -1,5 +1,6 @@
 package uk.gov.dwp.uc.pairtest.validators;
 
+import uk.gov.dwp.uc.pairtest.config.TicketServiceConfig;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
 import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
 import uk.gov.dwp.uc.pairtest.exception.PurchaseExceptionMessages;
@@ -18,7 +19,7 @@ public class TicketCountValidator implements TicketValidator{
                 .mapToInt(TicketTypeRequest::getNoOfTickets)
                 .sum();
 
-        if (totalTickets > MAX_TICKETS) {
+        if (totalTickets > TicketServiceConfig.getMaxTickets()) {
             throw new InvalidPurchaseException(
                     PurchaseExceptionMessages.format(PurchaseExceptionMessages.MSG_MAX_TICKETS_EXCEEDED, MAX_TICKETS),
                     InvalidPurchaseException.ValidationFailureType.MAX_TICKETS_EXCEEDED);
